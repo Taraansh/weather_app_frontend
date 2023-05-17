@@ -13,7 +13,7 @@ export default function Details() {
   const [location, setLocation] = useState("");
 
   // Get the current date in YYYY-MM-DD format
-  // const currentDate = new Date().toISOString().slice(0, 10);
+  const currentDate = new Date().toISOString().slice(0, 10);
 
   // Calculate the previous day in YYYY-MM-DD format
   const previousDate = new Date(Date.now() - 864e5).toISOString().slice(0, 10);
@@ -26,20 +26,27 @@ export default function Details() {
     const response = await fetch(present_url);
     const data = await response.json();
     console.log(data);
-    setSearchDetails(data);
 
-    const past_url = `https://weather-4ggl.onrender.com/pastdetails/${location}/${previousDate}/`;
-    const past_response = await fetch(past_url);
-    const past_data = await past_response.json();
-    console.log(past_data);
-    setSearchYesterdayDetails(past_data);
+    if (data.hasOwnProperty("error")) {
+      setSearchDetails(null);
+      setSearchYesterdayDetails(null);
+      setSearchTomorrowDetails(null);
+      alert("City not available");
+    } else {
+      setSearchDetails(data);
 
-    const future_url = `https://weather-4ggl.onrender.com/futuredetails/${location}/${nextDate}/`;
-    const future_response = await fetch(future_url);
-    const future_data = await future_response.json();
-    console.log(future_data);
-    setSearchTomorrowDetails(future_data);
+      const past_url = `https://weather-4ggl.onrender.com/pastdetails/${location}/${previousDate}/`;
+      const past_response = await fetch(past_url);
+      const past_data = await past_response.json();
+      console.log(past_data);
+      setSearchYesterdayDetails(past_data);
 
+      const future_url = `https://weather-4ggl.onrender.com/futuredetails/${location}/${nextDate}/`;
+      const future_response = await fetch(future_url);
+      const future_data = await future_response.json();
+      console.log(future_data);
+      setSearchTomorrowDetails(future_data);
+    }
     setLoading(false);
   };
 
@@ -112,7 +119,7 @@ export default function Details() {
                     width="16"
                     height="16"
                     fill="currentColor"
-                    class="bi bi-search"
+                    className="bi bi-search"
                     viewBox="0 0 16 16"
                   >
                     <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
@@ -138,7 +145,10 @@ export default function Details() {
               <div className="col">
                 <div className="card" style={{ height: "100%" }}>
                   <div className="card-body">
-                    <h3 className="card-header">Yesterday</h3>
+                    <h3 className="card-header px-0 text-center">Yesterday</h3>
+                    <h5 className="card-header px-0 text-center">
+                      {previousDate}
+                    </h5>
                     <h5 className="card-text my-2">
                       Temp:
                       {
@@ -193,7 +203,10 @@ export default function Details() {
               <div className="col">
                 <div className="card" style={{ height: "100%" }}>
                   <div className="card-body">
-                    <h3 className="card-header">Today</h3>
+                    <h3 className="card-header px-0 text-center">Today</h3>
+                    <h5 className="card-header px-0 text-center">
+                      {currentDate}
+                    </h5>
                     <h5 className="card-text my-2">
                       Temp: {searchDetails.current.temp_c}
                       <span>&#8451;</span>
@@ -229,7 +242,8 @@ export default function Details() {
               <div className="col">
                 <div className="card" style={{ height: "100%" }}>
                   <div className="card-body">
-                    <h3 className="card-header">Tomorrow</h3>
+                    <h3 className="card-header px-0 text-center">Tomorrow</h3>
+                    <h5 className="card-header px-0 text-center">{nextDate}</h5>
                     <h5 className="card-text my-2">
                       Temp:
                       {
@@ -297,7 +311,10 @@ export default function Details() {
               <div className="col">
                 <div className="card" style={{ height: "100%" }}>
                   <div className="card-body">
-                    <h3 className="card-header">Yesterday</h3>
+                    <h3 className="card-header px-0 text-center">Yesterday</h3>
+                    <h5 className="card-header px-0 text-center">
+                      {previousDate}
+                    </h5>
                     <h5 className="card-text my-2">
                       Temp:
                       {yesterdayDetails.forecast.forecastday[0].day.avgtemp_c}
@@ -337,7 +354,10 @@ export default function Details() {
               <div className="col">
                 <div className="card" style={{ height: "100%" }}>
                   <div className="card-body">
-                    <h3 className="card-header">Today</h3>
+                    <h3 className="card-header px-0 text-center">Today</h3>
+                    <h5 className="card-header px-0 text-center">
+                      {currentDate}
+                    </h5>
                     <h5 className="card-text my-2">
                       Temp: {details.current.temp_c}
                       <span>&#8451;</span>
@@ -371,7 +391,8 @@ export default function Details() {
               <div className="col">
                 <div className="card" style={{ height: "100%" }}>
                   <div className="card-body">
-                    <h3 className="card-header">Tomorrow</h3>
+                    <h3 className="card-header px-0 text-center">Tomorrow</h3>
+                    <h5 className="card-header px-0 text-center">{nextDate}</h5>
                     <h5 className="card-text my-2">
                       Temp:
                       {tomorrowsDtails.forecast.forecastday[0].day.avgtemp_c}
