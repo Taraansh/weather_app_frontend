@@ -303,7 +303,7 @@ export default function Details() {
           <div className="container">
             <div className="p-3 pb-md-4 mx-auto text-center">
               <h1>
-                Weather for {details.location.name}, {details.location.region},
+                Weather of {details.location.name}, {details.location.region},
                 {details.location.country}
               </h1>
             </div>
